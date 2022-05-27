@@ -51,7 +51,7 @@
                         </td>
                         <td>
                             <a href="{{route('users.edit', ['user' => $user->id])}}" class="btn btn-info btn-sm" role="button" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-                            <a href="#resetPassword{{$user->id}}" class="btn btn-warning btn-sm" role="button" title="Password"><i class="fas fa-key"></i></a>
+                            <a class="btn btn-warning btn-sm" href="#" role="button" title="Password" data-toggle="modal" data-target="#passwordModal" data-userid="{{ $user->id }}" data-username="{{ $user->username }}"><i class="fas fa-key"></i></a>
                             
                             <form method="POST" class="d-inline" action="{{ route('users.destroy', ['user' => $user->id]) }}">
                                 @csrf    
@@ -64,26 +64,6 @@
                             </form>
                         </td>
                     </tr>
-
-                    <!-- Password Modal-->
-                    <div class="modal fade" id="resetPassword{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Resetear contraseña</h5>
-                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">Seguro que deseas resetear a la constraseña del usuario {{$user->username}} a <b>Sis2022$$</b></div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                                    <a class="btn btn-primary" href="{{route('users.password', ['user' => $user->id])}}">Resetear</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End Password Modal-->
                 @endforeach
                 </tbody>
             </table>
@@ -91,9 +71,51 @@
     </div>
 </div>
 <!-- /.container-fluid -->
+
+<!-- Password Modal-->
+<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Resetear contraseña</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <form action="{{route('users.password')}}" method="POST">
+                @csrf
+                
+                <div class="modal-body">
+                    Seguro que deseas resetear la constraseña del usuario <p></p>
+                    <input type="hidden" name="user_id" id="user_id"  value="{{old('user_id')}}" >
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Resetear</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Password Modal-->
 @endsection
 
 @push('scripts')
+    <!-- Mis scripts --> 
+    <script>
+        $('#passwordModal').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget)
+            let user_id = button.data('userid');
+            let username = button.data('username') + ' a Sis2022$$';
+
+            let modal = $(this);
+            modal.find('.modal-body #user_id').val(user_id);
+            modal.find('.modal-body p').text(username);
+        })
+    </script>
+
     <!-- Page level plugins -->
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
 	<script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>

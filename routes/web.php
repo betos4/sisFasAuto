@@ -28,7 +28,7 @@ Route::get('users/{user}', 'UserController@show')->name('users.show');
 Route::get('users/{user}/edit', 'UserController@edit')->name('users.edit');
 Route::match(['put', 'patch'], 'users/{user}', 'UserController@update')->name('users.update');
 Route::delete('users/{user}', 'UserController@destroy')->name('users.destroy');
-Route::get('users/{user}/password', 'UserController@password')->name('users.password');
+Route::post('users/password', 'UserController@password')->name('users.password');
 
 //MENU
 Route::resource('menus','MenuController');
@@ -46,3 +46,11 @@ Route::delete('roles/{rol}', 'RolController@destroy')->name('roles.destroy');
 //MENU-ROL
 Route::get('menu-rol', 'MenuRolController@index')->name('menu_rol');
 Route::post('menu-rol', 'MenuRolController@store')->name('guardar_menu_rol');
+
+//CLIENTE
+Route::get('clientes', 'ClienteController@index')->name('clientes.index');
+Route::get('clientes/{cliente}', 'ClienteController@show')->name('clientes.show');
+
+//CREDITO
+Route::get('creditos', 'CreditoController@index')->name('creditos.index');
+Route::get('creditos/{credito}', 'CreditoController@show')->name('creditos.show');

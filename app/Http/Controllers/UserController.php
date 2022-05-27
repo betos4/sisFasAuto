@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\UserRequest;
 use App\Models\Rol;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index() {
         //$users = User::all();
@@ -91,9 +95,14 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function password(int $id) {
-        dd($id);
+    public function password(Request $request) {
+        $id = $request->user_id;
 
-        
+        $user = User::findOrFail($id);
+        $user->password = 'Sis2022$$';
+        $user->update();
+
+        toastr()->success('Contraseña actualizada correctamente');
+        return redirect()->route('users.index');
     }
 }
