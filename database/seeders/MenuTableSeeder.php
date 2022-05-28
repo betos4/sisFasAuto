@@ -44,6 +44,24 @@ class MenuTableSeeder extends Seeder
                 'menu_id' => 1,
                 'icon_menu' => 'fas fa-users'
             ],
+
+            [
+                'name_menu' => 'Configurar',
+                'url_menu' => '#',
+                'icon_menu' => 'fa fa-cog'
+            ],
+            [
+                'name_menu' => 'Clientes',
+                'url_menu' => 'clientes',
+                'menu_id' => 6,
+                'icon_menu' => 'fa fa-user'
+            ],
+            [
+                'name_menu' => 'Créditos',
+                'url_menu' => 'creditos',
+                'menu_id' => 6,
+                'icon_menu' => 'fa-money'
+            ],
         ];
 
         foreach($menus as $menu){

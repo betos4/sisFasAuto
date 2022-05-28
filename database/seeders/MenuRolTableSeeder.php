@@ -23,6 +23,9 @@ class MenuRolTableSeeder extends Seeder
             array('rol_id' => '1', 'menu_id' => '4', 'created_at' => $now, 'updated_at' => $now),
             array('rol_id' => '1', 'menu_id' => '3', 'created_at' => $now, 'updated_at' => $now),
             array('rol_id' => '1', 'menu_id' => '5', 'created_at' => $now, 'updated_at' => $now),
+            array('rol_id' => '1', 'menu_id' => '6', 'created_at' => $now, 'updated_at' => $now),
+            array('rol_id' => '1', 'menu_id' => '7', 'created_at' => $now, 'updated_at' => $now),
+            array('rol_id' => '1', 'menu_id' => '8', 'created_at' => $now, 'updated_at' => $now),
         ];
         DB::table('menus_rol')->insert($menusRol);
     }
