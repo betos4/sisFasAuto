@@ -27,6 +27,7 @@ class CreateReportesTable extends Migration
             $table->float('saldoinsoluto', 10, 0)->nullable();
             $table->float('odometer', 10, 0)->nullable();
             $table->float('avg_odometer_by_day', 10, 0)->nullable();
+            $table->boolean('estado_activo')->default(1);
 
             //relaciones entre tablas
             $table->foreign('creditoid')->references('id')->on('creditos');

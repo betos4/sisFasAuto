@@ -50,8 +50,8 @@
                         @endif
                         </td>
                         <td>
-                            <a href="{{route('users.edit', ['user' => $user->id])}}" class="btn btn-info btn-sm" role="button" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-                            <a class="btn btn-warning btn-sm" href="#" role="button" title="Password" data-toggle="modal" data-target="#passwordModal" data-userid="{{ $user->id }}" data-username="{{ $user->username }}"><i class="fas fa-key"></i></a>
+                            <a href="{{route('users.edit', ['user' => $user->id])}}" class="btn btn-warning btn-sm" role="button" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                            <a class="btn btn-primary btn-sm" href="#" role="button" title="Password" data-toggle="modal" data-target="#passwordModal" data-userid="{{ $user->id }}" data-username="{{ $user->username }}"><i class="fas fa-key"></i></a>
                             
                             <form method="POST" class="d-inline" action="{{ route('users.destroy', ['user' => $user->id]) }}">
                                 @csrf    

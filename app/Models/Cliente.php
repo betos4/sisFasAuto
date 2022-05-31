@@ -16,6 +16,24 @@ class Cliente extends Model
         'apaterno',
         'amaterno',
         'email',
+        'telefono',
+        'celular',
+        'estadocivilid',
         'estado_activo',
     ];
+
+    //relacion con estado civil
+    public function estadoCivil() {
+        return $this->belongsTo(EstadoCivil::class, 'estadocivilid');
+    }
+
+    //relacion con direcciones
+    public function direcciones() {
+        return $this->hasMany(Direccion::class, 'clienteid');
+    }
+
+    //relacioni con referencias
+    public function referencias() {
+        return $this->hasMany(Referencia::class, 'clienteid');
+    }
 }

@@ -48,7 +48,7 @@
                         @endif
                         </td>
                         <td>
-                            <a href="{{route('roles.edit', ['rol' => $rol->id])}}" class="btn btn-info btn-sm" role="button" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="{{route('roles.edit', ['rol' => $rol->id])}}" class="btn btn-warning btn-sm" role="button" title="Editar"><i class="fas fa-pencil-alt"></i></a>
                             
                             <form method="POST" class="d-inline" action="{{ route('roles.destroy', ['rol' => $rol->id]) }}">
                                 @csrf    

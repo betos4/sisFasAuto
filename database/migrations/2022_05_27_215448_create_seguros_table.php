@@ -20,6 +20,7 @@ class CreateSegurosTable extends Migration
             $table->string('numseguro', '50')->nullable();
             $table->date('fechainicio')->nullable();
             $table->date('fechafin')->nullable();
+            $table->boolean('estado_activo')->default(1);
 
             //relaciones entre tablas
             $table->foreign('vehiculoid')->references('id')->on('vehiculos');

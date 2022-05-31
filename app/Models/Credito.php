@@ -13,8 +13,20 @@ class Credito extends Model
     protected $guarded = ['id'];
     protected $primaryKey = 'id';
 
+    //relacion estado credito
     public function estadoCredito()
     {
         return $this->belongsTo(EstadoCredito::class, 'estadocreditoid');
+    }
+
+    //relacion con cliente
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class, 'clienteid');
+    }
+
+    //relacion con contratos
+    public function contratos() {
+        return $this->hasMany(Contrato::class, 'creditoid');
     }
 }

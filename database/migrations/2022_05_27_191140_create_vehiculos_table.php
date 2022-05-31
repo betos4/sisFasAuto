@@ -25,7 +25,7 @@ class CreateVehiculosTable extends Migration
             $table->string('motor')->nullable();
             $table->string('chasis')->nullable();
             $table->string('anio', '10')->nullable();
-            $table->string('placa', '10')->nullable();
+            $table->string('placa', '50')->nullable();
             $table->boolean('estado_activo')->default(1);
 
             //relaciones entre tablas

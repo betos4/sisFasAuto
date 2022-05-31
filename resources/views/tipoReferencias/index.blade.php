@@ -11,41 +11,41 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Clientes</h1>
+    <h1 class="h3 mb-2 text-gray-800">Tipo Referencias</h1>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-body">
+
+            <a class="btn btn-primary" href="{{route('tipoReferencias.create')}}" title="Crear" role="button"><i class="fas fa-file" aria-hidden="true"></i> Crear</a>
+            <hr>
+            
             <table class="table table-bordered table-striped dt-responsive" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>Identificación</th>
                         <th>Nombre</th>
-                        <th>Email</th>
                         <th>Estado</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($clientes as $cliente)
+                @foreach($tipoReferencias as $tipoReferencia)
                     <tr>
-                        <td>{{$cliente->rut}}</td>
-                        <td>{{$cliente->nombre}}</td>
-                        <td>{{$cliente->email}}</td>
+                        <td>{{$tipoReferencia->nombre}}</td>
                         <td>
-                        @if($cliente->estado_activo)
+                        @if($tipoReferencia->estado_activo)
                             <button class="btn btn-success btn-sm">Activado</button>
                         @else
                             <button class="btn btn-danger btn-sm">Desactivado</button>
                         @endif
                         </td>
                         <td>
-                            <a href="{{route('clientes.edit', ['cliente' => $cliente->id])}}" class="btn btn-warning btn-sm" role="button" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-
-                            <form method="POST" class="d-inline" action="{{ route('clientes.destroy', ['cliente' => $cliente->id]) }}">
+                            <a href="{{route('tipoReferencias.edit', ['tipoReferencia' => $tipoReferencia->id])}}" class="btn btn-warning btn-sm" role="button" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                            
+                            <form method="POST" class="d-inline" action="{{ route('tipoReferencias.destroy', ['tipoReferencia' => $tipoReferencia->id]) }}">
                                 @csrf    
                                 @method('DELETE')
-                                @if($cliente->estado_activo)
+                                @if($tipoReferencia->estado_activo)
                                     <button type="submit" class="btn btn-danger btn-sm" title="Desactivar"><i class="fas fa-trash"></i></button>
                                 @else
                                     <button type="submit" class="btn btn-success btn-sm" title="Activar"><i class="fas fa-check"></i></button>

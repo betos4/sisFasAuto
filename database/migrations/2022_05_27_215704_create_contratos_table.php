@@ -27,6 +27,7 @@ class CreateContratosTable extends Migration
             $table->string('pathfacturacontrato')->nullable();
             $table->string('pathtablaamortizacion')->nullable();
             $table->string('pathpagare')->nullable();
+            $table->boolean('estado_activo')->default(1);
 
             //relaciones entre tablas
             $table->foreign('creditoid')->references('id')->on('creditos');

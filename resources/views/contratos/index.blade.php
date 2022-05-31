@@ -11,41 +11,53 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Clientes</h1>
+    <h1 class="h3 mb-2 text-gray-800">Contratos</h1>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-body">
+
+            <a class="btn btn-primary" href="{{route('contratos.findContract')}}" title="Crear" role="button"><i class="fas fa-file" aria-hidden="true"></i> Crear</a>
+            <hr>
+            
             <table class="table table-bordered table-striped dt-responsive" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>Identificación</th>
                         <th>Nombre</th>
-                        <th>Email</th>
+                        <th>Operación</th>
+                        <th>Contrato</th>
+                        <th>Tipo</th>
+                        <th>Fecha inicio</th>
+                        <th>Fecha fin</th>
                         <th>Estado</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($clientes as $cliente)
+                @foreach($contratos as $contrato)
                     <tr>
-                        <td>{{$cliente->rut}}</td>
-                        <td>{{$cliente->nombre}}</td>
-                        <td>{{$cliente->email}}</td>
+                        <td>{{$contrato->identificacion}}</td>
+                        <td>{{$contrato->nombreCliente}}</td>
+                        <td>{{$contrato->operacion}}</td>
+                        <td>{{$contrato->numcontrato}}</td>
+                        <td>{{$contrato->tipocontrato}}</td>
+                        <td>{{date('Y-m-d', strtotime($contrato->fechainicio))}}</td>
+                        <td>{{date('Y-m-d', strtotime($contrato->fechafin))}}</td>
                         <td>
-                        @if($cliente->estado_activo)
+                        @if($contrato->estado_activo)
                             <button class="btn btn-success btn-sm">Activado</button>
                         @else
                             <button class="btn btn-danger btn-sm">Desactivado</button>
                         @endif
                         </td>
                         <td>
-                            <a href="{{route('clientes.edit', ['cliente' => $cliente->id])}}" class="btn btn-warning btn-sm" role="button" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-
-                            <form method="POST" class="d-inline" action="{{ route('clientes.destroy', ['cliente' => $cliente->id]) }}">
+                            <a href="{{route('contratos.edit', ['contrato' => $contrato->id])}}" class="btn btn-warning btn-sm" role="button" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                            
+                            <form method="POST" class="d-inline" action="{{ route('contratos.destroy', ['contrato' => $contrato->id]) }}">
                                 @csrf    
                                 @method('DELETE')
-                                @if($cliente->estado_activo)
+                                @if($contrato->estado_activo)
                                     <button type="submit" class="btn btn-danger btn-sm" title="Desactivar"><i class="fas fa-trash"></i></button>
                                 @else
                                     <button type="submit" class="btn btn-success btn-sm" title="Activar"><i class="fas fa-check"></i></button>

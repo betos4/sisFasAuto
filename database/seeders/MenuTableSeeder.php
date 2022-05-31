@@ -60,7 +60,31 @@ class MenuTableSeeder extends Seeder
                 'name_menu' => 'Créditos',
                 'url_menu' => 'creditos',
                 'menu_id' => 6,
-                'icon_menu' => 'fa-money'
+                'icon_menu' => 'fa fa-coins'
+            ],
+            [
+                'name_menu' => 'Estado civiles',
+                'url_menu' => 'estadoCiviles',
+                'menu_id' => 6,
+                'icon_menu' => 'fas fa-church'
+            ],
+            [
+                'name_menu' => 'Tipo referencias',
+                'url_menu' => 'tipoReferencias',
+                'menu_id' => 6,
+                'icon_menu' => 'fa fa-sitemap'
+            ],
+
+            [
+                'name_menu' => 'Gestionar',
+                'url_menu' => '#',
+                'icon_menu' => 'fa fa-folder-open'
+            ],
+            [
+                'name_menu' => 'Contratos',
+                'url_menu' => 'contratos',
+                'menu_id' => 11,
+                'icon_menu' => 'fa fa-file'
             ],
         ];
 

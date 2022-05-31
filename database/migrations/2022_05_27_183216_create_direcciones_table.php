@@ -20,6 +20,7 @@ class CreateDireccionesTable extends Migration
             $table->string('direccion', 2500)->nullable();
             $table->string('sector')->nullable();
             $table->string('tipodireccion')->nullable();
+            $table->boolean('estado_activo')->default(1);
 
             //relaciones entre tablas
             $table->foreign('clienteid')->references('id')->on('clientes');
