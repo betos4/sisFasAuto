@@ -230,13 +230,16 @@
             <hr/>
             <div class="row">
                 <div class="col-sm-4">
-                    <b>Operación: </b><span>{{$credito->noperacion}}</span>
+                    <b>Operación: </b><span>{{$credito->noperacion}}</span><br>
+                    <b>Monto total: </b><span>{{round($credito->montototal, 2)}}</span>
                 </div>
                 <div class="col-sm-4">
-                    <b>Fecha otorgamiento: </b><span>{{date('Y-m-d', strtotime($credito->fechaotorgamiento))}}</span>
+                    <b>Fecha otorgamiento: </b><span>{{date('Y-m-d', strtotime($credito->fechaotorgamiento))}}</span><br>
+                    <b>Saldo insoluto: </b><span>{{round($credito->saldoinsoluto, 2)}}</span>
                 </div>
                 <div class="col-sm-4">
-                    <b>Fecha vencimiento: </b><span>{{date('Y-m-d', strtotime($credito->fechavencimiento))}}</span>
+                    <b>Fecha vencimiento: </b><span>{{date('Y-m-d', strtotime($credito->fechavencimiento))}}</span><br>
+                    <b>Valor cuota: </b><span>{{round($credito->valorcuota, 2)}}</span>
                 </div>
             </div>  
             <hr>
@@ -360,7 +363,7 @@
             <hr>
             <div class="card-body">
                 <button type="submit" class="btn btn-primary">Guardar</button>
-                <a href="{{route('creditos.index')}}" class="btn btn-danger">Cancelar</a>      
+                <a href="{{route('contratos.index')}}" class="btn btn-danger">Cancelar</a>      
             </div>
         </div> 
     </form>

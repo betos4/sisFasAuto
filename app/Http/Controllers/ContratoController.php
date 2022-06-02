@@ -12,6 +12,7 @@ use App\Models\Vehiculo;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class ContratoController extends Controller
 {
@@ -87,7 +88,6 @@ class ContratoController extends Controller
         catch(ModelNotFoundException $err){
             toastr()->error('El registro no pudo ser guardado. Contactate con el Administrador');
         }  
-        
     }
 
     //funcion que actualiza el cliente
@@ -102,11 +102,57 @@ class ContratoController extends Controller
     }
 
     public function edit(Contrato $contrato) {
-        //TODO
+        //variables
+        $dispositivos = null;
+        $seguros = null;
+
+        $credito = $contrato->credito;
+        $estadoCiviles = EstadoCivil::where('estado_activo', '=', true)->get();
+        $tipoReferencias = TipoReferencia::where('estado_activo', '=', true)->get();
+        $cliente = $credito->cliente;
+        $direcciones = Direccion::select('direcciones.*', 'cantones.nombre AS canton', 'provincias.nombre AS provincia')
+        ->leftJoin('cantones', 'cantones.id', '=', 'direcciones.cantonid')
+        ->leftJoin('provincias', 'provincias.id', '=', 'cantones.provinciaid')
+        ->where('direcciones.clienteid', '=', $cliente->id)
+        ->get();
+
+        $vehiculo = Vehiculo::where('creditoid', '=', $credito->id)->first();
+        if($vehiculo) {
+            $dispositivos = $vehiculo->dispositivos;
+            $seguros = $vehiculo->seguros;
+        } 
+
+        return view('contratos.edit')->with([
+            'contrato' => $contrato,
+            'credito' => $credito,
+            'estadoCiviles' => $estadoCiviles,
+            'tipoReferencias' => $tipoReferencias,
+            'cliente' => $cliente,
+            'direcciones' => $direcciones,
+            'vehiculo' => $vehiculo,
+            'dispositivos' => $dispositivos,
+            'seguros' => $seguros,
+        ]);
     }
 
     public function update(ContratoRequest $request, Contrato $contrato) {
-        //TODO
+        try{
+            //actualizar cliente
+            $cliente = Cliente::findOrFail($request->clienteid);
+            $cliente->email = $request->email;
+            $cliente->telefono = $request->telefono;
+            $cliente->celular = $request->celular;
+            $cliente->estadocivilid = $request->estado_civil;
+            $cliente->update();
+            
+            $contrato->update($request->validated());
+            
+            toastr()->success('Registro actualizado correctamente');
+            return redirect()->route('contratos.index');
+        }
+        catch(ModelNotFoundException $err){
+            toastr()->error('El registro no pudo ser actualizado. Contactate con el Administrador');
+        }  
     }
 
     public function destroy(Contrato $contrato) {
@@ -139,6 +185,109 @@ class ContratoController extends Controller
 
         return response()->json([
             'registros' => $registros
+         ]);
+    }
+
+    public function print(Contrato $contrato) {
+        try {
+            //variables
+            $dispositivos = null;
+            $seguros = null;
+
+            $credito = $contrato->credito;
+            $cliente = $credito->cliente;
+            $direccion = Direccion::select('direcciones.*', 'cantones.nombre AS canton', 'provincias.nombre AS provincia')
+            ->leftJoin('cantones', 'cantones.id', '=', 'direcciones.cantonid')
+            ->leftJoin('provincias', 'provincias.id', '=', 'cantones.provinciaid')
+            ->where('direcciones.clienteid', '=', $cliente->id)
+            ->first();
+
+            $vehiculo = Vehiculo::where('creditoid', '=', $credito->id)->first();
+
+            $template = new \PhpOffice\PhpWord\TemplateProcessor('contrato_riego_cero.docx');
+            //variables
+            $template->setValue('num_contrato', $contrato->numcontrato);
+            $template->setValue('nombre_cliente', $cliente->nombre);
+            $template->setValue('identificacion_cliente', $cliente->rut);
+            $template->setValue('celular_cliente', $cliente->celular);
+            $template->setValue('telefono_cliente', $cliente->telefono);
+            $template->setValue('correo_cliente', $cliente->email);
+            $template->setValue('direccion_cliente', $direccion->direccion);
+            $template->setValue('sector_cliente', $direccion->sector);
+            $template->setValue('ciudad_cliente', 'SIN CIUDAD');
+            $template->setValue('provincia_cliente', 'SIN PROVINCIA');
+            $template->setValue('fecha_inicio', $contrato->fechainicio);
+            $template->setValue('fecha_fin', $contrato->fechafin);
+            $template->setValue('marca_vehiculo', $vehiculo->marca);
+            $template->setValue('chasis_vehiculo', $vehiculo->chasis);
+            $template->setValue('anio_vehiculo', $vehiculo->anio);
+            $template->setValue('modelo_vehiculo', $vehiculo->modelo);
+            $template->setValue('motor_vehiculo', $vehiculo->motor);
+            $template->setValue('placa_vehiculo', $vehiculo->placa);
+            $template->setValue('color_vehiculo', $vehiculo->color);
+    
+            $tempFile = tempnam(sys_get_temp_dir(), 'PHPWord');
+            $template->saveAs($tempFile);
+    
+            $headers = [
+                "Content-Type: application/octet-stream",
+            ];
+    
+            return response()->download($tempFile, 'contrato.docx', $headers)->deleteFileAfterSend(true);
+        } catch(\PhpOffice\PhpWord\Exception\Exception $e) {
+            return back($e->getCode());
+        }
+    }
+
+    public function consult(Request $request) {
+        $actuales = Contrato::whereYear('created_at', '=', '2022')
+        ->whereMonth('created_at', '=', '06')
+        ->whereDay('created_at', '=', '01')
+        ->where('estado_activo', '=', '1')
+        ->count();
+
+        $mensuales = Contrato::whereYear('created_at', '=', '2022')
+        ->whereMonth('created_at', '=', '06')
+        ->where('estado_activo', '=', '1')
+        ->count();
+
+        $plazo = Contrato::selectRaw('SUM(DATEDIFF(year,fechainicio,fechafin)) as anios')
+        ->whereYear('created_at', '=', '2022')
+        ->whereMonth('created_at', '=', '06')
+        ->where('estado_activo', '=', '1')
+        ->first();
+
+        $valorCredito = Contrato::whereYear('created_at', '=', '2022')
+        ->whereMonth('created_at', '=', '06')
+        ->where('estado_activo', '=', '1')
+        ->sum('valorgarantia');
+
+        $contratosPorDia = Contrato::selectRaw('DAY(created_at) as dia, COUNT(id) as numcontrato')
+        ->whereYear('created_at', '=', '2022')
+        ->whereMonth('created_at', '=', '06')
+        ->where('estado_activo', '=', '1')
+        ->groupByRaw('DAY(created_at)')
+        ->get();
+
+        $marcas = Contrato::selectRaw('vehiculos.marca as marca, COUNT(contratos.id) as numcontrato')
+        ->join('creditos', 'creditos.id', '=', 'contratos.creditoid')
+        ->join('vehiculos', 'vehiculos.creditoid', '=', 'creditos.id')
+        ->whereYear('contratos.created_at', '=', '2022')
+        ->whereMonth('contratos.created_at', '=', '06')
+        ->where('contratos.estado_activo', '=', '1')
+        ->groupBy('vehiculos.marca')
+        ->get();
+
+        /*print($marcas);
+        dd();*/
+
+        return response()->json([
+            'actuales' => $actuales,
+            'mensuales' => $mensuales,
+            'plazo' => $plazo->anios,
+            'valorCredito' => $valorCredito,
+            'contratosPorDia' => $contratosPorDia,
+            'marcas' => $marcas,
          ]);
     }
 }

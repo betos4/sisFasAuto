@@ -28,17 +28,61 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 }
 
 // Bar Chart Example
-var ctx = document.getElementById("myBarChart");
-var myBarChart = new Chart(ctx, {
+var myBarChart = '';
+
+function myBarChartDraw(data) {
+  //mis variables
+  var diasTotales = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+  var numContratos = [];
+  var resultado = '';
+
+  for(var i in diasTotales) {
+    resultado = '';
+    for(var j in data) {
+      if(diasTotales[i] == data[j].dia) {
+        resultado = data[j].numcontrato;
+      } 
+    }
+
+    numContratos.push(resultado);
+  }
+
+
+  //ingreso la data
+  //for (var i in data) {
+    /*diasTotales.forEach(item => {
+      if(item == data[i].dia) {
+        numContratos.push(data[i].numcontrato);
+      } else {
+        numContratos.push(0);
+      }
+    });*/
+
+    //console.log(numContratos);
+    /*if(diasTotales.includes(data[i].dia)) {
+      console.log(i + ' AAAAAAAAAAAAAAAAA');
+    } else {
+      console.log('Noooooooo');
+    }
+    dias.push(data[i].dia);
+    numContratos.push(data[i].numcontrato);*/
+  //}
+
+  console.log(numContratos);
+
+  //ingreso la data de los contratos
+
+  var ctx = document.getElementById("myBarChart");
+  myBarChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: ["January", "February", "March", "April", "May", "June"],
+    labels: diasTotales,
     datasets: [{
-      label: "Revenue",
+      label: "Contratos",
       backgroundColor: "#4e73df",
       hoverBackgroundColor: "#2e59d9",
       borderColor: "#4e73df",
-      data: [4215, 5312, 6251, 7841, 9821, 14984],
+      data: numContratos,
     }],
   },
   options: {
@@ -68,12 +112,12 @@ var myBarChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: 15000,
+          max: Math.max(numContratos),
           maxTicksLimit: 5,
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
-            return '$' + number_format(value);
+            return number_format(value);
           }
         },
         gridLines: {
@@ -103,9 +147,11 @@ var myBarChart = new Chart(ctx, {
       callbacks: {
         label: function(tooltipItem, chart) {
           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+          return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
         }
       }
     },
   }
 });
+
+}

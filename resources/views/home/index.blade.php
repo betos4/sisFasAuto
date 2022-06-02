@@ -14,11 +14,11 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Cartera Propia</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">115</div>
+                                Emitidos hoy</div>
+                            <div id="contratosDia" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fa fa-user fa-2x text-gray-300"></i>
+                            <i class="fa fa-list fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -32,11 +32,11 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Cartera Gail</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">45</div>
+                                Emitidos Periodo</div>
+                            <div id="contratosMes" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fa fa-user fa-2x text-gray-300"></i>
+                            <i class="fa fa-list fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -49,12 +49,12 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Cartera Anita
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Plazo Promedio (años)
                             </div>
-                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">38</div>
+                            <div id="plazoAnios" class="h5 mb-0 mr-3 font-weight-bold text-gray-800">0</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fa fa-user fa-2x text-gray-300"></i>
+                            <i class="fa fa-calendar-alt fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -68,11 +68,11 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Cartera Armando</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                Crédito Promedio</div>
+                            <div id="creditoPromedio" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fa fa-user fa-2x text-gray-300"></i>
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -88,12 +88,12 @@
                 <!-- Card Header - Dropdown -->
                 <div
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Crecimiento personal anual</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Emitidos por día</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-area">
-                        <canvas id="myAreaChart"></canvas>
+                        <canvas id="myBarChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -105,7 +105,7 @@
                 <!-- Card Header - Dropdown -->
                 <div
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Porcentaje por cartera</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Top marcas</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -134,9 +134,59 @@
 
 @push('scripts')
     <!-- Page level plugins -->
-	<script src="/vendor/chart.js/Chart.min.js"></script>
+    <script src="/vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="/js/demo/chart-area-demo.js"></script>
+    <script src="/js/demo/chart-bar-demo.js"></script>
     <script src="/js/demo/chart-pie-demo.js"></script>
+
+    <!-- Mi Script -->
+    <script>
+       consultarDataContratos();
+        
+        function consultarDataContratos(){
+            var keyword = '';
+
+            $.post('{{ route("contratos.consult") }}',
+            {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                keyword:keyword
+            },
+            function(data){
+                dataConsult(data);
+            });
+        }
+
+        function dataConsult(res){
+            let contratosDia = res.actuales;
+            let contratosMes = res.mensuales;
+            let plazoAnios = res.plazo / contratosMes;
+            let creditoPromedio = res.valorCredito / contratosMes;
+
+            //seteo los valores contratoDias
+            let div = document.getElementById('contratosDia');
+            div.innerHTML = contratosDia;
+
+            //seteo los valores contratoMes
+            div = document.getElementById('contratosMes');
+            div.innerHTML = contratosMes;
+
+            //seteo los valores plazoAnios
+            div = document.getElementById('plazoAnios');
+            div.innerHTML = round(plazoAnios);
+
+            //seteo los valores creditoPromedio
+            div = document.getElementById('creditoPromedio');
+            div.innerHTML = round(creditoPromedio);
+
+            myBarChartDraw(res.contratosPorDia);
+            myPieChartDraw(res.marcas);
+            //console.log(myBarChartData);
+        }
+
+        //funcion para redondear un valor
+        function round(num) {
+            return +(Math.round(num + "e+2")  + "e-2");
+        }
+    </script>
 @endpush

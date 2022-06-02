@@ -86,3 +86,5 @@ Route::match(['put', 'patch'], 'contratos/{contrato}', 'ContratoController@updat
 Route::delete('contratos/{contrato}', 'ContratoController@destroy')->name('contratos.destroy');
 Route::get('contratos_buscador', 'ContratoController@findContract')->name('contratos.findContract');
 Route::post('contratos/search', 'ContratoController@search')->name('contratos.search');
+Route::get('contratos/{contrato}/print', 'ContratoController@print')->name('contratos.print');
+Route::post('contratos/consult', 'ContratoController@consult')->name('contratos.consult');

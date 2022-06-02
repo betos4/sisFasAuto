@@ -27,7 +27,6 @@
                         <th>Nombre</th>
                         <th>Operación</th>
                         <th>Contrato</th>
-                        <th>Tipo</th>
                         <th>Fecha inicio</th>
                         <th>Fecha fin</th>
                         <th>Estado</th>
@@ -41,7 +40,6 @@
                         <td>{{$contrato->nombreCliente}}</td>
                         <td>{{$contrato->operacion}}</td>
                         <td>{{$contrato->numcontrato}}</td>
-                        <td>{{$contrato->tipocontrato}}</td>
                         <td>{{date('Y-m-d', strtotime($contrato->fechainicio))}}</td>
                         <td>{{date('Y-m-d', strtotime($contrato->fechafin))}}</td>
                         <td>
@@ -53,7 +51,8 @@
                         </td>
                         <td>
                             <a href="{{route('contratos.edit', ['contrato' => $contrato->id])}}" class="btn btn-warning btn-sm" role="button" title="Editar"><i class="fas fa-pencil-alt"></i></a>
-                            
+                            <a href="{{route('contratos.print', ['contrato' => $contrato->id])}}" class="btn btn-primary btn-sm"  role="button" title="Imprimir"><i class="fa fa-print"></i></a>
+
                             <form method="POST" class="d-inline" action="{{ route('contratos.destroy', ['contrato' => $contrato->id]) }}">
                                 @csrf    
                                 @method('DELETE')
