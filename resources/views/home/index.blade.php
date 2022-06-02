@@ -112,19 +112,8 @@
                     <div class="chart-pie pt-4 pb-2">
                         <canvas id="myPieChart"></canvas>
                     </div>
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> Propia
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> Gail
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-info"></i> Anita
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-warning"></i> Armando
-                        </span>
+                    <div id="infoLegends" class="mt-4 text-center small">
+                        
                     </div>
                 </div>
             </div>
@@ -158,10 +147,11 @@
         }
 
         function dataConsult(res){
+            let paletaColores = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#F5B7B1', '#D7BDE2', '#AED6F1', '#A3E4D7', '#ABEBC6', '#F9E79F', '#F5CBA7', '#F7F9F9', '#D5DBDB', '#2e59d9', '#17a673', '#2c9faf', '#dfa616', '#E6B0AA', '#D2B4DE', '#A9CCE3', '#A2D9CE', '#A9DFBF', '#FAD7A0', '#EDBB99', '#E5E7E9', '#D5DBDB', '#641E16', '#78281F', '#512E5F', '#4A235A', '#154360', '#1B4F72', '#0E6251', '#0B5345', '#145A32', '#7D6608', '#7E5109', '#784212', '#6E2C00', '#7B7D7D', '#626567', '#4D5656', '#424949', '#17202A'];
             let contratosDia = res.actuales;
             let contratosMes = res.mensuales;
-            let plazoAnios = res.plazo / contratosMes;
-            let creditoPromedio = res.valorCredito / contratosMes;
+            let plazoAnios = contratosMes == 0 ? 0 : res.plazo / contratosMes;
+            let creditoPromedio = contratosMes == 0 ? 0 : res.valorCredito / contratosMes;
 
             //seteo los valores contratoDias
             let div = document.getElementById('contratosDia');
@@ -180,8 +170,20 @@
             div.innerHTML = round(creditoPromedio);
 
             myBarChartDraw(res.contratosPorDia);
-            myPieChartDraw(res.marcas);
+            myPieChartDraw(res.marcas, paletaColores);
+            addLegends(res.marcas, paletaColores);
             //console.log(myBarChartData);
+        }
+
+        //funcion para leyendas
+        function addLegends(marcas, paletaColores) {
+            var html = '';
+
+            for(var i in marcas) {
+                html += `<span class="mr-2"><i class="fas fa-circle" style="color:` + paletaColores[i] + `"></i>` + marcas[i].marca + `</span>`;
+            }
+            
+            $('#infoLegends').html(html);
         }
 
         //funcion para redondear un valor

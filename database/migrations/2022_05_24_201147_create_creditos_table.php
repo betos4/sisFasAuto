@@ -64,6 +64,7 @@ class CreateCreditosTable extends Migration
 			$table->float('lat_wa', 10, 0)->nullable();
 			$table->float('lng_wa', 10, 0)->nullable();
             $table->boolean('estado_activo')->default(1);
+			$table->boolean('indicador_propia')->default(0);
 
             //relaciones entre tablas
             $table->foreign('clienteid')->references('id')->on('clientes');

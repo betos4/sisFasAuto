@@ -56,7 +56,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="valorgarantia">Valor garantía</label>
-                            <input type="text" class="form-control @error('valorgarantia') is-invalid @enderror" id="valorgarantia" name="valorgarantia" placeholder="Valor garantía" required="required" value="{{old('valorgarantia') ?? $contrato->valorgarantia}}">
+                            <input type="text" class="form-control @error('valorgarantia') is-invalid @enderror" id="valorgarantia" name="valorgarantia" placeholder="Valor garantía" required="required" value="{{old('valorgarantia') ?? round($contrato->valorgarantia, 2)}}">
                         @error('valorgarantia')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

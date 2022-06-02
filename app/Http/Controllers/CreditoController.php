@@ -15,10 +15,18 @@ class CreditoController extends Controller
     }
     
     public function index() {
-        $creditos = Credito::select('creditos.*', 'vehiculos.marca AS marca', 'vehiculos.modelo AS modelo', 'clientes.nombre AS cliente')
-        ->join('vehiculos', 'vehiculos.creditoid', '=', 'creditos.id')
-        ->join('clientes', 'clientes.id', '=', 'creditos.clienteid')
-        ->get();
+        if(session()->get('is_superadministrator_rol') == 1) {
+            $creditos = Credito::select('creditos.*', 'vehiculos.marca AS marca', 'vehiculos.modelo AS modelo', 'clientes.nombre AS cliente')
+            ->join('vehiculos', 'vehiculos.creditoid', '=', 'creditos.id')
+            ->join('clientes', 'clientes.id', '=', 'creditos.clienteid')
+            ->get();
+        } else {
+            $creditos = Credito::select('creditos.*', 'vehiculos.marca AS marca', 'vehiculos.modelo AS modelo', 'clientes.nombre AS cliente')
+            ->join('vehiculos', 'vehiculos.creditoid', '=', 'creditos.id')
+            ->join('clientes', 'clientes.id', '=', 'creditos.clienteid')
+            ->where('creditos.indicador_propia', '=', true)
+            ->get();
+        }        
 
         return view('creditos.index')->with([
             'creditos' => $creditos,

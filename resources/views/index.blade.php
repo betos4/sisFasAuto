@@ -5,10 +5,13 @@
     <meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="">
-	<meta name="author" content="">
+	<meta name="description" content="Sistema RiesgoCero">
+    <meta name="author" content="Roberto Gallardo">
 
     <title>Login</title>
+
+    <!-- FAVION -->
+    <link rel="icon" href="{{ url('img/siccectch1_logo.png') }}">
 
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
@@ -48,7 +51,7 @@
                     </div>
                 </div>
 
-                <a href="#">¿Olvidó su contraseña?</a>
+                <!--<a href="#">¿Olvidó su contraseña?</a>-->
                 <input type="submit" class="btn" value="Ingresar">
             </form>
         </div>

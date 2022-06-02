@@ -5,7 +5,7 @@ Chart.defaults.global.defaultFontColor = '#858796';
 // Pie Chart Example
 var myPieChart = '';
 
-function myPieChartDraw(data) {
+function myPieChartDraw(data, paletaColores) {
   //mis variables
   var marca = [];
   var numContratos = [];
@@ -23,8 +23,8 @@ function myPieChartDraw(data) {
       labels: marca,
       datasets: [{
         data: numContratos,
-        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e'],
-        hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#dfa616'],
+        backgroundColor: paletaColores,
+        hoverBackgroundColor: paletaColores,
         hoverBorderColor: "rgba(234, 236, 244, 1)",
       }],
     },

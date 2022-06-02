@@ -17,7 +17,14 @@ class ClienteController extends Controller
     }
     
     public function index() {
-        $clientes = Cliente::all();
+        if(session()->get('is_superadministrator_rol') == 1) {
+            $clientes = Cliente::all();
+        } else {
+            $clientes = Cliente::select('clientes.*')
+            ->join('creditos', 'creditos.clienteid', '=', 'clientes.id')
+            ->where('creditos.indicador_propia', '=', true)
+            ->get();
+        }
 
         return view('clientes.index')->with([
             'clientes' => $clientes,

@@ -13,6 +13,7 @@ use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ContratoController extends Controller
 {
@@ -79,6 +80,11 @@ class ContratoController extends Controller
             $cliente->celular = $request->celular;
             $cliente->estadocivilid = $request->estado_civil;
             $cliente->update();
+
+            //actualizar credito
+            $credito = Credito::findOrFail($request->creditoid);
+            $credito->indicador_propia = 1;
+            $credito->update();
             
             $contrato = Contrato::create($request->validated());
             
@@ -88,13 +94,6 @@ class ContratoController extends Controller
         catch(ModelNotFoundException $err){
             toastr()->error('El registro no pudo ser guardado. Contactate con el Administrador');
         }  
-    }
-
-    //funcion que actualiza el cliente
-    protected function updateCliente(ContratoRequest $request) {
-        $cliente = User::findOrFail($id);
-        $user->password = 'Sis2022$$';
-        $user->update();
     }
 
     public function show(Contrato $contrato) {
@@ -240,31 +239,36 @@ class ContratoController extends Controller
     }
 
     public function consult(Request $request) {
-        $actuales = Contrato::whereYear('created_at', '=', '2022')
-        ->whereMonth('created_at', '=', '06')
-        ->whereDay('created_at', '=', '01')
+        $date = Carbon::now();
+        $anio = $date->format('Y');
+        $mes = $date->format('m');
+        $dia = $date->format('d');
+
+        $actuales = Contrato::whereYear('created_at', '=', $anio)
+        ->whereMonth('created_at', '=', $mes)
+        ->whereDay('created_at', '=', $dia)
         ->where('estado_activo', '=', '1')
         ->count();
 
-        $mensuales = Contrato::whereYear('created_at', '=', '2022')
-        ->whereMonth('created_at', '=', '06')
+        $mensuales = Contrato::whereYear('created_at', '=', $anio)
+        ->whereMonth('created_at', '=', $mes)
         ->where('estado_activo', '=', '1')
         ->count();
 
         $plazo = Contrato::selectRaw('SUM(DATEDIFF(year,fechainicio,fechafin)) as anios')
-        ->whereYear('created_at', '=', '2022')
-        ->whereMonth('created_at', '=', '06')
+        ->whereYear('created_at', '=', $anio)
+        ->whereMonth('created_at', '=', $mes)
         ->where('estado_activo', '=', '1')
         ->first();
 
-        $valorCredito = Contrato::whereYear('created_at', '=', '2022')
-        ->whereMonth('created_at', '=', '06')
+        $valorCredito = Contrato::whereYear('created_at', '=', $anio)
+        ->whereMonth('created_at', '=', $mes)
         ->where('estado_activo', '=', '1')
         ->sum('valorgarantia');
 
         $contratosPorDia = Contrato::selectRaw('DAY(created_at) as dia, COUNT(id) as numcontrato')
-        ->whereYear('created_at', '=', '2022')
-        ->whereMonth('created_at', '=', '06')
+        ->whereYear('created_at', '=', $anio)
+        ->whereMonth('created_at', '=', $mes)
         ->where('estado_activo', '=', '1')
         ->groupByRaw('DAY(created_at)')
         ->get();
@@ -272,8 +276,8 @@ class ContratoController extends Controller
         $marcas = Contrato::selectRaw('vehiculos.marca as marca, COUNT(contratos.id) as numcontrato')
         ->join('creditos', 'creditos.id', '=', 'contratos.creditoid')
         ->join('vehiculos', 'vehiculos.creditoid', '=', 'creditos.id')
-        ->whereYear('contratos.created_at', '=', '2022')
-        ->whereMonth('contratos.created_at', '=', '06')
+        ->whereYear('contratos.created_at', '=', $anio)
+        ->whereMonth('contratos.created_at', '=', $mes)
         ->where('contratos.estado_activo', '=', '1')
         ->groupBy('vehiculos.marca')
         ->get();

@@ -5,13 +5,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Sistema RiesgoCero">
+    <meta name="author" content="Roberto Gallardo">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'RiesgoCero') }}</title>
+
+    <!-- FAVION -->
+    <link rel="icon" href="{{ url('img/siccectch1_logo.png') }}">
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -37,7 +40,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">FASTAUTO <sup>1</sup></div>
+                <div class="sidebar-brand-text mx-3">RIESGOCERO <sup>1</sup></div>
             </a>
 
             <!-- Divider -->
@@ -96,7 +99,7 @@
                         <!-- Nav Item - Logo Siccec -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#">
-                                <img src="/img/logo_siccec.png" height="60%">
+                                <img src="/img/siccectch2_logo.png" height="60%">
                             </a>
                         </li>
 
@@ -110,14 +113,14 @@
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <!--<a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Perfil
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Actividad Log
-                                </a>
+                                </a>-->
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -141,7 +144,7 @@
             <!-- Footer -->
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; SICCEC 2022</span>
+                    <span>Copyright &copy; SICCECTEC 2022</span>
                 </div>
             </div>
             <!-- End of Footer -->

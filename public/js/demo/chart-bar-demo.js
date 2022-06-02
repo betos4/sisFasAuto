@@ -32,126 +32,108 @@ var myBarChart = '';
 
 function myBarChartDraw(data) {
   //mis variables
-  var diasTotales = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+  var dias = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
   var numContratos = [];
-  var resultado = '';
+  var resultado = 0;
+  var ejeY = 0;
 
-  for(var i in diasTotales) {
+  for(var i in dias) {
     resultado = '';
     for(var j in data) {
-      if(diasTotales[i] == data[j].dia) {
+      if(dias[i] == data[j].dia) {
         resultado = data[j].numcontrato;
+
+        //verifico si el numMayor
+        if(resultado > ejeY) {
+          ejeY = Number(resultado);
+        }
       } 
     }
 
     numContratos.push(resultado);
   }
-
-
-  //ingreso la data
-  //for (var i in data) {
-    /*diasTotales.forEach(item => {
-      if(item == data[i].dia) {
-        numContratos.push(data[i].numcontrato);
-      } else {
-        numContratos.push(0);
-      }
-    });*/
-
-    //console.log(numContratos);
-    /*if(diasTotales.includes(data[i].dia)) {
-      console.log(i + ' AAAAAAAAAAAAAAAAA');
-    } else {
-      console.log('Noooooooo');
-    }
-    dias.push(data[i].dia);
-    numContratos.push(data[i].numcontrato);*/
-  //}
-
-  console.log(numContratos);
+  ejeY = ejeY + 3;
 
   //ingreso la data de los contratos
-
   var ctx = document.getElementById("myBarChart");
   myBarChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: diasTotales,
-    datasets: [{
-      label: "Contratos",
-      backgroundColor: "#4e73df",
-      hoverBackgroundColor: "#2e59d9",
-      borderColor: "#4e73df",
-      data: numContratos,
-    }],
-  },
-  options: {
-    maintainAspectRatio: false,
-    layout: {
-      padding: {
-        left: 10,
-        right: 25,
-        top: 25,
-        bottom: 0
-      }
-    },
-    scales: {
-      xAxes: [{
-        time: {
-          unit: 'month'
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false
-        },
-        ticks: {
-          maxTicksLimit: 6
-        },
-        maxBarThickness: 25,
+    type: 'bar',
+    data: {
+      labels: dias,
+      datasets: [{
+        label: "Contratos",
+        backgroundColor: "#4e73df",
+        hoverBackgroundColor: "#2e59d9",
+        borderColor: "#4e73df",
+        data: numContratos,
       }],
-      yAxes: [{
-        ticks: {
-          min: 0,
-          max: Math.max(numContratos),
-          maxTicksLimit: 5,
-          padding: 10,
-          // Include a dollar sign in the ticks
-          callback: function(value, index, values) {
-            return number_format(value);
+    },
+    options: {
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          left: 10,
+          right: 25,
+          top: 25,
+          bottom: 0
+        }
+      },
+      scales: {
+        xAxes: [{
+          time: {
+            unit: 'month'
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          ticks: {
+            maxTicksLimit: 6
+          },
+          maxBarThickness: 25,
+        }],
+        yAxes: [{
+          ticks: {
+            min: 0,
+            max: ejeY,
+            maxTicksLimit: 5,
+            padding: 10,
+            // Include a dollar sign in the ticks
+            callback: function(value, index, values) {
+              return number_format(value);
+            }
+          },
+          gridLines: {
+            color: "rgb(234, 236, 244)",
+            zeroLineColor: "rgb(234, 236, 244)",
+            drawBorder: false,
+            borderDash: [2],
+            zeroLineBorderDash: [2]
           }
-        },
-        gridLines: {
-          color: "rgb(234, 236, 244)",
-          zeroLineColor: "rgb(234, 236, 244)",
-          drawBorder: false,
-          borderDash: [2],
-          zeroLineBorderDash: [2]
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        titleMarginBottom: 10,
+        titleFontColor: '#6e707e',
+        titleFontSize: 14,
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        caretPadding: 10,
+        callbacks: {
+          label: function(tooltipItem, chart) {
+            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+            return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
+          }
         }
-      }],
-    },
-    legend: {
-      display: false
-    },
-    tooltips: {
-      titleMarginBottom: 10,
-      titleFontColor: '#6e707e',
-      titleFontSize: 14,
-      backgroundColor: "rgb(255,255,255)",
-      bodyFontColor: "#858796",
-      borderColor: '#dddfeb',
-      borderWidth: 1,
-      xPadding: 15,
-      yPadding: 15,
-      displayColors: false,
-      caretPadding: 10,
-      callbacks: {
-        label: function(tooltipItem, chart) {
-          var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
-        }
-      }
-    },
-  }
-});
-
+      },
+    }
+  });
 }
