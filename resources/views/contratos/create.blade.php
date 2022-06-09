@@ -12,7 +12,7 @@
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Datos del contrato</h1>
-    <form action="{{route('contratos.store')}}" method="POST">
+    <form action="{{route('contratos.store')}}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="card p-3 mb-4">
             <div class="row">
@@ -77,6 +77,62 @@
                         <label for="fechafin" class="col-md-6">Fecha fin</label>
                         <input id="fechafin" type="date" class="form-control @error('fechafin') is-invalid @enderror" name="fechafin" value="{{ old('fechafin') }}">
                         @error('fechafin')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                </div>
+
+                <hr>
+                
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="pathidentificacion">Adjuntar indentificación</label>
+                        <input type="file" class="form-control @error('pathidentificacion') is-invalid @enderror" id="pathidentificacion" name="pathidentificacion" value="{{old('pathidentificacion')}}">
+                        @error('pathidentificacion')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="pathplanilla">Adjuntar planilla</label>
+                        <input type="file" class="form-control @error('pathplanilla') is-invalid @enderror" id="pathplanilla" name="pathplanilla" value="{{old('pathplanilla')}}">
+                        @error('pathplanilla')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="pathfacturavehiculo">Adjuntar factura vehículo</label>
+                        <input type="file" class="form-control @error('pathfacturavehiculo') is-invalid @enderror" id="pathfacturavehiculo" name="pathfacturavehiculo" value="{{old('pathfacturavehiculo')}}">
+                        @error('pathfacturavehiculo')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="pathtablaamortizacion">Adjuntar tabla amortización</label>
+                        <input type="file" class="form-control @error('pathtablaamortizacion') is-invalid @enderror" id="pathtablaamortizacion" name="pathtablaamortizacion" value="{{old('pathtablaamortizacion')}}">
+                        @error('pathtablaamortizacion')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="pathpagare">Adjuntar pagaré</label>
+                        <input type="file" class="form-control @error('pathpagare') is-invalid @enderror" id="pathpagare" name="pathpagare" value="{{old('pathpagare')}}">
+                        @error('pathpagare')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

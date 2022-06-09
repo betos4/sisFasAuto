@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 
 class ContratoController extends Controller
 {
@@ -73,27 +74,93 @@ class ContratoController extends Controller
 
     public function store(ContratoRequest $request) {
         try{
-            //actualizar cliente
-            $cliente = Cliente::findOrFail($request->clienteid);
-            $cliente->email = $request->email;
-            $cliente->telefono = $request->telefono;
-            $cliente->celular = $request->celular;
-            $cliente->estadocivilid = $request->estado_civil;
-            $cliente->update();
+            DB::beginTransaction();
+                //actualizar cliente
+                $cliente = Cliente::findOrFail($request->clienteid);
+                $cliente->email = $request->email;
+                $cliente->telefono = $request->telefono;
+                $cliente->celular = $request->celular;
+                $cliente->estadocivilid = $request->estado_civil;
+                $cliente->update();
 
-            //actualizar credito
-            $credito = Credito::findOrFail($request->creditoid);
-            $credito->indicador_propia = 1;
-            $credito->update();
-            
-            $contrato = Contrato::create($request->validated());
+                //actualizar credito
+                $credito = Credito::findOrFail($request->creditoid);
+                $credito->indicador_propia = 1;
+                $credito->update();
+                
+                $contrato = Contrato::create($request->validated());
+
+                //actualizo con los paths de los archivos
+                //VERIFICO SI EXISTE PATH SINO LO CREA
+                if (!File::exists(public_path("\documentos\contratos\\".$contrato->id))) {
+                    File::makeDirectory(public_path("\documentos\contratos\\".$contrato->id));
+                }
+
+                //PATH DONDE SE GUARDAN LOS ARCHIVOS
+                $path ='documentos/contratos/'.$contrato->id;
+                $savePath = public_path($path);
+
+                //Archivo identificacion
+                if($request->hasFile('pathidentificacion')) {
+                    $archivo = $request->file('pathidentificacion');
+                    $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                    //$archivo->move(public_path().'/archivos/', $nombreArchivo);
+                    $archivo->move($savePath, $nombreArchivo);
+        
+                    $contrato->pathidentificacion = $path . '/' . $nombreArchivo;
+                }
+
+                //Archivo planilla
+                if($request->hasFile('pathplanilla')) {
+                    $archivo = $request->file('pathplanilla');
+                    $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                    //$archivo->move(public_path().'/archivos/', $nombreArchivo);
+                    $archivo->move($savePath, $nombreArchivo);
+        
+                    $contrato->pathplanilla = $path . '/' . $nombreArchivo;
+                }
+
+                //Archivo facturaVehiculo
+                if($request->hasFile('pathfacturavehiculo')) {
+                    $archivo = $request->file('pathfacturavehiculo');
+                    $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                    //$archivo->move(public_path().'/archivos/', $nombreArchivo);
+                    $archivo->move($savePath, $nombreArchivo);
+        
+                    $contrato->pathfacturavehiculo = $path . '/' . $nombreArchivo;
+                }
+
+                //Archivo pathtablaAmortizacion
+                if($request->hasFile('pathtablaamortizacion')) {
+                    $archivo = $request->file('pathtablaamortizacion');
+                    $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                    //$archivo->move(public_path().'/archivos/', $nombreArchivo);
+                    $archivo->move($savePath, $nombreArchivo);
+        
+                    $contrato->pathtablaamortizacion = $path . '/' . $nombreArchivo;
+                }
+
+                //Archivo pathPagare
+                if($request->hasFile('pathpagare')) {
+                    $archivo = $request->file('pathpagare');
+                    $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                    //$archivo->move(public_path().'/archivos/', $nombreArchivo);
+                    $archivo->move($savePath, $nombreArchivo);
+        
+                    $contrato->pathpagare = $path . '/' . $nombreArchivo;
+                }
+
+                $contrato->update();
+            DB::commit();
             
             toastr()->success('Registro guardado correctamente');
             return redirect()->route('contratos.index');
-        }
-        catch(ModelNotFoundException $err){
+        } catch(ModelNotFoundException $err){
             toastr()->error('El registro no pudo ser guardado. Contactate con el Administrador');
-        }  
+        } catch(Exception $e) {
+            toastr()->error('El registro no pudo ser guardado. Contactate con el Administrador');
+            DB::rollback();
+        }
     }
 
     public function show(Contrato $contrato) {
@@ -120,7 +187,7 @@ class ContratoController extends Controller
             $dispositivos = $vehiculo->dispositivos;
             $seguros = $vehiculo->seguros;
         } 
-
+        
         return view('contratos.edit')->with([
             'contrato' => $contrato,
             'credito' => $credito,
@@ -136,22 +203,88 @@ class ContratoController extends Controller
 
     public function update(ContratoRequest $request, Contrato $contrato) {
         try{
-            //actualizar cliente
-            $cliente = Cliente::findOrFail($request->clienteid);
-            $cliente->email = $request->email;
-            $cliente->telefono = $request->telefono;
-            $cliente->celular = $request->celular;
-            $cliente->estadocivilid = $request->estado_civil;
-            $cliente->update();
-            
-            $contrato->update($request->validated());
+            DB::beginTransaction();
+                //actualizar cliente
+                $cliente = Cliente::findOrFail($request->clienteid);
+                $cliente->email = $request->email;
+                $cliente->telefono = $request->telefono;
+                $cliente->celular = $request->celular;
+                $cliente->estadocivilid = $request->estado_civil;
+                $cliente->update();
+
+                $contrato->update($request->validated());
+
+                //actualizo con los paths de los archivos
+                //VERIFICO SI EXISTE PATH SINO LO CREA
+                if (!File::exists(public_path("\documentos\contratos\\".$contrato->id))) {
+                    File::makeDirectory(public_path("\documentos\contratos\\".$contrato->id));
+                }
+
+                //PATH DONDE SE GUARDAN LOS ARCHIVOS
+                $path ='documentos/contratos/'.$contrato->id;
+                $savePath = public_path($path);
+
+                //Archivo identificacion
+                if($request->hasFile('pathidentificacion')) {
+                    $archivo = $request->file('pathidentificacion');
+                    $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                    //$archivo->move(public_path().'/archivos/', $nombreArchivo);
+                    $archivo->move($savePath, $nombreArchivo);
+        
+                    $contrato->pathidentificacion = $path . '/' . $nombreArchivo;
+                }
+
+                //Archivo planilla
+                if($request->hasFile('pathplanilla')) {
+                    $archivo = $request->file('pathplanilla');
+                    $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                    //$archivo->move(public_path().'/archivos/', $nombreArchivo);
+                    $archivo->move($savePath, $nombreArchivo);
+        
+                    $contrato->pathplanilla = $path . '/' . $nombreArchivo;
+                }
+
+                //Archivo facturaVehiculo
+                if($request->hasFile('pathfacturavehiculo')) {
+                    $archivo = $request->file('pathfacturavehiculo');
+                    $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                    //$archivo->move(public_path().'/archivos/', $nombreArchivo);
+                    $archivo->move($savePath, $nombreArchivo);
+        
+                    $contrato->pathfacturavehiculo = $path . '/' . $nombreArchivo;
+                }
+
+                //Archivo pathtablaAmortizacion
+                if($request->hasFile('pathtablaamortizacion')) {
+                    $archivo = $request->file('pathtablaamortizacion');
+                    $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                    //$archivo->move(public_path().'/archivos/', $nombreArchivo);
+                    $archivo->move($savePath, $nombreArchivo);
+        
+                    $contrato->pathtablaamortizacion = $path . '/' . $nombreArchivo;
+                }
+
+                //Archivo pathPagare
+                if($request->hasFile('pathpagare')) {
+                    $archivo = $request->file('pathpagare');
+                    $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                    //$archivo->move(public_path().'/archivos/', $nombreArchivo);
+                    $archivo->move($savePath, $nombreArchivo);
+        
+                    $contrato->pathpagare = $path . '/' . $nombreArchivo;
+                }
+
+                $contrato->update();
+            DB::commit();
             
             toastr()->success('Registro actualizado correctamente');
             return redirect()->route('contratos.index');
-        }
-        catch(ModelNotFoundException $err){
+        } catch(ModelNotFoundException $err){
             toastr()->error('El registro no pudo ser actualizado. Contactate con el Administrador');
-        }  
+        } catch(Exception $e) {
+            toastr()->error('El registro no pudo ser guardado. Contactate con el Administrador');
+            DB::rollback();
+        }
     }
 
     public function destroy(Contrato $contrato) {

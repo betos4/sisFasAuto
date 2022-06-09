@@ -13,7 +13,7 @@
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Datos del contrato</h1>
 
-    <form action="{{route('contratos.update', ['contrato' => $contrato->id])}}" method="POST">
+    <form action="{{route('contratos.update', ['contrato' => $contrato->id])}}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -85,6 +85,87 @@
                         </span>
                         @enderror
                     </div>
+                </div>
+            </div>
+
+            <hr>
+                
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="pathidentificacion">Adjuntar indentificación</label>
+                @if($contrato->pathidentificacion != '')
+                    <a href="/{{$contrato->pathidentificacion}}" class="btn btn-info btn-circle btn-sm" target="_black">
+                        <i class="fas fa-download"></i>
+                    </a>
+                @endif
+                    <input type="file" class="form-control @error('pathidentificacion') is-invalid @enderror" id="pathidentificacion" name="pathidentificacion" value="{{old('pathidentificacion')}}">
+                    @error('pathidentificacion')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="pathplanilla">Adjuntar planilla</label>
+                @if($contrato->pathplanilla != '')
+                    <a href="/{{$contrato->pathplanilla}}" class="btn btn-info btn-circle btn-sm" target="_black">
+                        <i class="fas fa-download"></i>
+                    </a>
+                @endif
+                    <input type="file" class="form-control @error('pathplanilla') is-invalid @enderror" id="pathplanilla" name="pathplanilla" value="{{old('pathplanilla')}}">
+                    @error('pathplanilla')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="pathfacturavehiculo">Adjuntar factura vehículo</label>
+                @if($contrato->pathfacturavehiculo != '')
+                    <a href="/{{$contrato->pathfacturavehiculo}}" class="btn btn-info btn-circle btn-sm" target="_black">
+                        <i class="fas fa-download"></i>
+                    </a>
+                @endif
+                    <input type="file" class="form-control @error('pathfacturavehiculo') is-invalid @enderror" id="pathfacturavehiculo" name="pathfacturavehiculo" value="{{old('pathfacturavehiculo')}}">
+                    @error('pathfacturavehiculo')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="pathtablaamortizacion">Adjuntar tabla amortización</label>
+                @if($contrato->pathtablaamortizacion != '')
+                    <a href="/{{$contrato->pathtablaamortizacion}}" class="btn btn-info btn-circle btn-sm" target="_black">
+                        <i class="fas fa-download"></i>
+                    </a>
+                @endif
+                    <input type="file" class="form-control @error('pathtablaamortizacion') is-invalid @enderror" id="pathtablaamortizacion" name="pathtablaamortizacion" value="{{old('pathtablaamortizacion')}}">
+                    @error('pathtablaamortizacion')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="pathpagare">Adjuntar pagaré</label>
+                @if($contrato->pathpagare != '')
+                    <a href="/{{$contrato->pathpagare}}" class="btn btn-info btn-circle btn-sm" target="_black">
+                        <i class="fas fa-download"></i>
+                    </a>
+                @endif
+                    <input type="file" class="form-control @error('pathpagare') is-invalid @enderror" id="pathpagare" name="pathpagare" value="{{old('pathpagare')}}">
+                    @error('pathpagare')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
                 </div>
             </div>
         </div>  
